@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { createDeck, shuffleDeck, calculateHand } from './blackjackLogic';
+import {createDeck, shuffleDeck, calculateHand, verifyGameResult, distributeCards} from './blackjackLogic';
 import type { Card } from '../types/Card';
+import {GameWinner} from "../types/enums/GameWinner.ts";
 
 describe('Blackjack Logic', () => {
     describe('createDeck', () => {
@@ -86,11 +87,60 @@ describe('Blackjack Logic', () => {
                 { id: 'AD', value: 'A', color: 'D' },
                 { id: '10C', value: '10', color: 'C' }
             ];
-            expect(calculateHand(hand)).toBe(12); // 1 + 1 + 10
+            expect(calculateHand(hand)).toBe(12);
         });
 
         it('should return 0 for an empty hand', () => {
             expect(calculateHand([])).toBe(0);
+        });
+    });
+
+    describe('verifyGameResult', () => {
+        it('should return PLAYER_WIN if player score is higher than dealer score', () => {
+            const playerScore = 20;
+            const dealerScore = 18;
+            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.PLAYER_WIN);
+        });
+        it('should return PLAYER_WIN if the dealer bust and not the player', () => {
+            const playerScore = 10;
+            const dealerScore = 22;
+            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.PLAYER_WIN);
+        });
+        it('should return DRAW if the dealer and the player have the same score', () => {
+            const playerScore = 20;
+            const dealerScore = 20;
+            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.DRAW);
+        });
+        it('should return DEALER_WIN if the player and the dealer busted', () => {
+            const playerScore = 22;
+            const dealerScore = 22;
+            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.DEALER_WIN);
+        });
+        it('should retuen DEALER_WIN if the dealer score is higher than player score', () => {
+            const playerScore = 18;
+            const dealerScore = 20;
+            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.DEALER_WIN);
+        });
+        it('should return null if the player has less than 21 and the dealer didn\'t finished to draw (less than 17)', () => {
+            const playerScore = 20;
+            const dealerScore = 16;
+            expect(verifyGameResult(playerScore, dealerScore)).toBe(null);
+        });
+    });
+
+    describe('distributeCards', () => {
+        it('should return the quantity of cards wanted', () => {
+            const deck: Card[] = createDeck();
+            const quantity = 5;
+            const distributedCards: Card[] = distributeCards(deck, quantity);
+            expect(distributedCards).toHaveLength(quantity);
+        });
+        it('should remove the cards distributed from the deck', () => {
+            const deck: Card[] = createDeck();
+            const quantity = 5;
+            const originalDeckLength = deck.length;
+            distributeCards(deck, quantity);
+            expect(deck).toHaveLength(originalDeckLength - quantity);
         });
     });
 });

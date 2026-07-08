@@ -1,4 +1,5 @@
 import type {Card} from "../types/Card.ts";
+import {GameWinner} from "../types/enums/GameWinner.ts";
 
 const COLORS: string[] = ["S", "D", "C", "H"];
 const VALUES: string[] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -41,7 +42,7 @@ export function shuffleDeck(deck: Card[]) {
 /**
  * Calculates the score of a hand of cards
  * @param hand the hand that is just an array of cards (Card[])
- * @return {number} the score of the hand
+ * @returns {number} the score of the hand
  */
 export function calculateHand(hand: Card[]): number {
     let score = 0;
@@ -67,3 +68,33 @@ export function calculateHand(hand: Card[]): number {
     return score;
 }
 
+/**
+ *
+ * @param playerScore the score of the player
+ * @param dealerScore the score of the dealer
+ * @returns {GameWinner | null} the winner if there's one, else null
+ */
+export function verifyGameResult(playerScore: number, dealerScore: number): GameWinner | null {
+    if (playerScore > 21) {
+        return GameWinner.DEALER_WIN;
+    } else if (dealerScore < 17) {
+        return null;
+    } else if (dealerScore > 21) {
+        return GameWinner.PLAYER_WIN;
+    } else if (playerScore > dealerScore) {
+        return GameWinner.PLAYER_WIN;
+    } else if (dealerScore > playerScore) {
+        return GameWinner.DEALER_WIN;
+    }
+    return GameWinner.DRAW;
+}
+
+/**
+ * distribute cards from the deck
+ * @param deck the deck where we take cards
+ * @param quantite the qtt of cards wanted
+ * @returns {Card[]} the distributed cards
+ */
+export function distributeCards(deck: Card[], quantite: number): Card[] {
+    return deck.splice(-quantite);
+}
