@@ -31,6 +31,45 @@ export const useGameStore = create<GameStore>((set, get) => ({
         get().verifyState();
     },
 
+    hit: () => {
+        if (get().gameState !== GameState.PLAYER_TURN) return;
+
+        const newDeck = get().deck;
+        const newCard: Card[] = distributeCards(newDeck, 1);
+        const newPlayerHand = [...get().playerHand, ...newCard];
+        const newPlayerScore = calculateHand(newPlayerHand);
+
+        set({
+            deck: newDeck,
+            playerHand: newPlayerHand,
+            playerScore: newPlayerScore
+        });
+        get().verifyState();
+    },
+
+    stand: () => {
+        if (get().gameState !== GameState.PLAYER_TURN) return;
+
+        set({
+            gameState: GameState.DEALER_TURN
+        });
+
+        let dealerScore = get().dealerScore;
+        while (dealerScore < 17) {
+            const newDeck = get().deck;
+            const newCard: Card[] = distributeCards(newDeck, 1);
+            const newDealerHand = [...get().dealerHand, ...newCard];
+            dealerScore = calculateHand(newDealerHand);
+
+            set({
+                deck: newDeck,
+                dealerHand: newDealerHand,
+                dealerScore: dealerScore
+            });
+        }
+        get().verifyState();
+    },
+
     verifyState: () => {
         const playerScore = get().playerScore;
         const dealerScore = get().dealerScore;

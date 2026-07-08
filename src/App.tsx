@@ -20,11 +20,11 @@ function App() {
     };
 
     const handleStand = () => {
-
+        useGameStore.getState().stand();
     };
 
     const handleHit = () => {
-
+        useGameStore.getState().hit();
     };
 
     return (

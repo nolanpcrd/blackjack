@@ -15,6 +15,8 @@ interface GameMemory {
 interface GameActions {
     initGame: () => void;
     verifyState: () => void;
+    hit: () => void;
+    stand: () => void;
 }
 
 export type GameStore = GameMemory & GameActions;
