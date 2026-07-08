@@ -20,16 +20,16 @@ describe('Blackjack Logic', () => {
     describe('shuffleDeck', () => {
         it('should keep 52 cards', () => {
             const deck: Card[] = createDeck();
-            const shuffled: Card[] = shuffleDeck([...deck]);
-            expect(shuffled).toHaveLength(52);
+            shuffleDeck(deck);
+            expect(deck).toHaveLength(52);
         });
 
         it('should modify the order of cards', () => {
             const deck: Card[] = createDeck();
             const originalIds: string[] = deck.map(c => c.id);
 
-            const shuffled: Card[] = shuffleDeck(deck);
-            const shuffledIds: string[] = shuffled.map(c => c.id);
+            shuffleDeck(deck);
+            const shuffledIds: string[] = deck.map(c => c.id);
 
             expect(shuffledIds).not.toEqual(originalIds);
         });

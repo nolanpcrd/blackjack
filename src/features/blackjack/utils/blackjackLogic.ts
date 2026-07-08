@@ -20,15 +20,15 @@ export function createDeck(): Card[] {
         }
     }
 
-    return shuffleDeck(deck);
+    shuffleDeck(deck);
+    return deck
 }
 
 /**
  * Shuffles the given deck
  * @param deck A deck that is just an array of cards (Card[])
- * @return {Card[]} The same deck but shuffled
  */
-export function shuffleDeck(deck: Card[]): Card[] {
+export function shuffleDeck(deck: Card[]) {
     let currentIndex: number = deck.length;
     while (currentIndex != 0) {
         const randomIndex: number = Math.floor(Math.random() * currentIndex);
@@ -36,7 +36,6 @@ export function shuffleDeck(deck: Card[]): Card[] {
 
         [deck[currentIndex], deck[randomIndex]] = [deck[randomIndex], deck[currentIndex]];
     }
-    return deck;
 }
 
 /**
