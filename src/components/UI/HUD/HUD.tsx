@@ -1,10 +1,10 @@
 import './HUD.css'
 
-export default function HUD({ showHit, showStand }: { showHit: boolean; showStand: boolean }) {
+export default function HUD({ showButtons, hitCallback, standCallback }: { showButtons: boolean; hitCallback?: () => void; standCallback?: () => void }) {
     return (
         <div className="hud">
-            {showHit && <button className="hud-button hit-button">Hit</button>}
-            {showStand && <button className="hud-button stand-button">Stand</button>}
+            {showButtons && <button className="hud-button hit-button" onClick={hitCallback}>Hit</button>}
+            {showButtons && <button className="hud-button stand-button" onClick={standCallback}>Stand</button>}
         </div>
     )
 }
