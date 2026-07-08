@@ -99,32 +99,56 @@ describe('Blackjack Logic', () => {
         it('should return PLAYER_WIN if player score is higher than dealer score', () => {
             const playerScore = 20;
             const dealerScore = 18;
-            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.PLAYER_WIN);
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.PLAYER_WIN);
         });
         it('should return PLAYER_WIN if the dealer bust and not the player', () => {
             const playerScore = 10;
             const dealerScore = 22;
-            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.PLAYER_WIN);
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.PLAYER_WIN);
         });
         it('should return DRAW if the dealer and the player have the same score', () => {
             const playerScore = 20;
             const dealerScore = 20;
-            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.DRAW);
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.DRAW);
         });
-        it('should return DEALER_WIN if the player and the dealer busted', () => {
+        it('should return DEALER_WIN if the player busted', () => {
             const playerScore = 22;
             const dealerScore = 22;
-            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.DEALER_WIN);
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.DEALER_WIN);
         });
-        it('should retuen DEALER_WIN if the dealer score is higher than player score', () => {
+        it('should return DEALER_WIN if the dealer score is higher than player score', () => {
             const playerScore = 18;
             const dealerScore = 20;
-            expect(verifyGameResult(playerScore, dealerScore)).toBe(GameWinner.DEALER_WIN);
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.DEALER_WIN);
         });
-        it('should return null if the player has less than 21 and the dealer didn\'t finished to draw (less than 17)', () => {
+        it('should return null if the dealer has not finished drawing (less than 17)', () => {
             const playerScore = 20;
             const dealerScore = 16;
-            expect(verifyGameResult(playerScore, dealerScore)).toBe(null);
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(null);
+        });
+        it('should return null during player turn even if dealer already has 17 or more', () => {
+            const playerScore = 18;
+            const dealerScore = 20;
+            const isPlayerTurn = true;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(null);
+        });
+        it('should return DEALER_WIN after player turn when dealer score is higher', () => {
+            const playerScore = 18;
+            const dealerScore = 20;
+            const isPlayerTurn = false;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.DEALER_WIN);
+        });
+        it('should return DEALER_WIN on player bust even during player turn', () => {
+            const playerScore = 22;
+            const dealerScore = 20;
+            const isPlayerTurn = true;
+            expect(verifyGameResult(playerScore, dealerScore, isPlayerTurn)).toBe(GameWinner.DEALER_WIN);
         });
     });
 

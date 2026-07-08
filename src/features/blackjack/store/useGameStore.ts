@@ -28,10 +28,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
             dealerScore: calculateHand(dHand),
             gameState: GameState.PLAYER_TURN
         });
+        get().verifyState();
     },
 
     verifyState: () => {
-        const winner : GameWinner | null = verifyGameResult(get().playerScore, get().dealerScore);
+        const playerScore = get().playerScore;
+        const dealerScore = get().dealerScore;
+        const isPlayerTurn = get().gameState === GameState.PLAYER_TURN;
+        const winner : GameWinner | null = verifyGameResult(playerScore, dealerScore, isPlayerTurn);
 
         if (winner !== null) {
             set({

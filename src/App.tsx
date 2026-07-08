@@ -9,16 +9,14 @@ import Results from "./components/UI/Results/Results.tsx";
 
 function App() {
     const [isMainMenuShown, setIsMainMenuShown] = useState<boolean>(true);
-    const { gameState } = useGameStore(state => ({
-        gameState: state.gameState,
-    }));
+    const gameState = useGameStore(state => state.gameState);
+
     const showButtons = gameState === GameState.PLAYER_TURN;
     const showResults = gameState === GameState.GAME_OVER;
 
     const startGame = () => {
         setIsMainMenuShown(false);
         useGameStore.getState().initGame();
-        useGameStore.getState().verifyState();
     };
 
     const handleStand = () => {

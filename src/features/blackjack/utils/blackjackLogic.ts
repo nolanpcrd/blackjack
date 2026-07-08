@@ -72,12 +72,16 @@ export function calculateHand(hand: Card[]): number {
  *
  * @param playerScore the score of the player
  * @param dealerScore the score of the dealer
+ * @param isPlayerTurn a bool that says if it's currently the player turn
  * @returns {GameWinner | null} the winner if there's one, else null
  */
-export function verifyGameResult(playerScore: number, dealerScore: number): GameWinner | null {
+export function verifyGameResult(playerScore: number, dealerScore: number, isPlayerTurn: boolean): GameWinner | null {
     if (playerScore > 21) {
         return GameWinner.DEALER_WIN;
-    } else if (dealerScore < 17) {
+    } else if (isPlayerTurn) {
+        return null;
+    }
+    else if (dealerScore < 17) {
         return null;
     } else if (dealerScore > 21) {
         return GameWinner.PLAYER_WIN;
