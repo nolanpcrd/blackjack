@@ -8,7 +8,11 @@ import {GameState} from "./features/blackjack/types/enums/GameState.ts";
 
 function App() {
     const [isMainMenuShown, setIsMainMenuShown] = useState<boolean>(true);
-    const showButtons : boolean = useGameStore.getState().gameState === GameState.PLAYER_TURN;
+    const { gameState } = useGameStore(state => ({
+        gameState: state.gameState,
+    }));
+    const showButtons = gameState === GameState.PLAYER_TURN;
+
     const maskMainMenu = () => {
         setIsMainMenuShown(false);
     };
