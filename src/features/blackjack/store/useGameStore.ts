@@ -25,7 +25,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
             playerHand: pHand,
             dealerHand: dHand,
             playerScore: calculateHand(pHand),
-            dealerScore: calculateHand(dHand)
+            dealerScore: calculateHand(dHand),
+            gameState: GameState.PLAYER_TURN
         });
     },
 
