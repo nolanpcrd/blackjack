@@ -2,6 +2,7 @@ import './App.css'
 import Scene from "./features/blackjack/components/Scene.tsx";
 import {useState} from "react";
 import MainMenu from "./components/UI/MainMenu/MainMenu.tsx";
+import HUD from "./components/UI/HUD/HUD.tsx";
 
 function App() {
     const [isMainMenuShown, setIsMainMenuShown] = useState(true);
@@ -16,6 +17,7 @@ function App() {
                 <></>
             </Scene>
             {isMainMenuShown && <MainMenu startCallback={maskMainMenu} />}
+            {!isMainMenuShown && <HUD showHit={true} showStand={true}/>}
         </>
     )
 }

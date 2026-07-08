@@ -17,11 +17,7 @@
 }
 
 .menu-start {
-    cursor: pointer;
     margin-top: 50px;
-    padding: 20px 30px;
-    border-radius: 10px;
-    border: none;
     background: var(--red-color);
     color: var(--white-color);
     font-size: 1.3em;
