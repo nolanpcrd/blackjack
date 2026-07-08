@@ -1,0 +1,28 @@
+.main-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #0000004a;
+    backdrop-filter: blur(10px);
+}
+
+.menu-logo {
+    width: 60vw;
+}
+
+.menu-start {
+    cursor: pointer;
+    margin-top: 50px;
+    padding: 20px 30px;
+    border-radius: 10px;
+    border: none;
+    background: var(--red-color);
+    color: var(--white-color);
+    font-size: 1.3em;
+}

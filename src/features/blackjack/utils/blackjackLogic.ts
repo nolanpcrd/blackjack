@@ -31,7 +31,7 @@ export function createDeck(): Card[] {
  */
 export function shuffleDeck(deck: Card[]) {
     let currentIndex: number = deck.length;
-    while (currentIndex != 0) {
+    while (currentIndex !== 0) {
         const randomIndex: number = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
@@ -92,9 +92,9 @@ export function verifyGameResult(playerScore: number, dealerScore: number): Game
 /**
  * distribute cards from the deck
  * @param deck the deck where we take cards
- * @param quantite the qtt of cards wanted
+ * @param quantity the qtt of cards wanted
  * @returns {Card[]} the distributed cards
  */
-export function distributeCards(deck: Card[], quantite: number): Card[] {
-    return deck.splice(-quantite);
+export function distributeCards(deck: Card[], quantity: number): Card[] {
+    return deck.splice(-quantity);
 }
