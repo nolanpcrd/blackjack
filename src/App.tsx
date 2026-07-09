@@ -1,5 +1,5 @@
 import './App.css'
-import Scene from "./components/Scene.tsx";
+import Scene from "./components/3D/Scene.tsx";
 import {useState} from "react";
 import MainMenu from "./components/UI/MainMenu/MainMenu.tsx";
 import HUD from "./components/UI/HUD/HUD.tsx";
