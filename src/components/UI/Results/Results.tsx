@@ -1,6 +1,6 @@
 import '../MainMenu/MainMenu.css'
-import {useGameStore} from "../../../features/blackjack/store/useGameStore.ts";
-import {GameWinner} from "../../../features/blackjack/types/enums/GameWinner.ts";
+import {useGameStore} from "../../../store/useGameStore.ts";
+import {GameWinner} from "../../../types/enums/GameWinner.ts";
 
 export default function Results({ onRestart }: { onRestart: () => void }) {
     let imageSrc = '';

@@ -1,10 +1,10 @@
 import './App.css'
-import Scene from "./features/blackjack/components/Scene.tsx";
+import Scene from "./components/Scene.tsx";
 import {useState} from "react";
 import MainMenu from "./components/UI/MainMenu/MainMenu.tsx";
 import HUD from "./components/UI/HUD/HUD.tsx";
-import {useGameStore} from "./features/blackjack/store/useGameStore.ts";
-import {GameState} from "./features/blackjack/types/enums/GameState.ts";
+import {useGameStore} from "./store/useGameStore.ts";
+import {GameState} from "./types/enums/GameState.ts";
 import Results from "./components/UI/Results/Results.tsx";
 
 function App() {
