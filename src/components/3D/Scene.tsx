@@ -13,7 +13,7 @@ export default function Scene({ children }: { children: React.ReactNode }) {
                 <CasinoScene/>
                 {children}
 
-                <PostProcessingEffects pixelSize={5.0} colorDivisions={20.0}/>
+                <PostProcessingEffects pixelSize={5.0} colorDivisions={16.0}/>
 
             </Canvas>
         </div>
