@@ -1,7 +1,7 @@
 import { wrapEffect } from '@react-three/postprocessing'
 import { Effect } from 'postprocessing'
 import { Uniform, Vector2, type WebGLRenderer } from 'three'
-import viewShader from '../../../assets/shaders/view.glsl?raw'
+import viewShader from '../../../../assets/shaders/view.glsl?raw'
 
 const fragmentShader = viewShader.replaceAll('texture(', 'texture2D(')
 

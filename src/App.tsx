@@ -9,6 +9,8 @@ import Results from "./components/UI/Results/Results.tsx";
 
 function App() {
     const [isMainMenuShown, setIsMainMenuShown] = useState<boolean>(true);
+    const [isAnimatingCamera, setIsAnimatingCamera] = useState<boolean>(false);
+
     const gameState = useGameStore(state => state.gameState);
 
     const showButtons = gameState === GameState.PLAYER_TURN;
@@ -16,6 +18,7 @@ function App() {
 
     const startGame = () => {
         setIsMainMenuShown(false);
+        setIsAnimatingCamera(true);
         useGameStore.getState().initGame();
     };
 
@@ -29,7 +32,7 @@ function App() {
 
     return (
         <>
-            <Scene>
+            <Scene isAnimatingCamera={isAnimatingCamera}>
                 <></>
             </Scene>
             {isMainMenuShown && <MainMenu startCallback={startGame} />}
