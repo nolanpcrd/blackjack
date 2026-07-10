@@ -27,7 +27,7 @@ export function createDeck(): Card[] {
 
 /**
  * Shuffles the given deck
- * @param deck A deck that is just an array of cards (Card[])
+ * @param deck A deck that is just an array of cards (CardModel[])
  */
 export function shuffleDeck(deck: Card[]) {
     let currentIndex: number = deck.length;
@@ -41,7 +41,7 @@ export function shuffleDeck(deck: Card[]) {
 
 /**
  * Calculates the score of a hand of cards
- * @param hand the hand that is just an array of cards (Card[])
+ * @param hand the hand that is just an array of cards (CardModel[])
  * @returns {number} the score of the hand
  */
 export function calculateHand(hand: Card[]): number {
