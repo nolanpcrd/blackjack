@@ -14,9 +14,11 @@ interface GameMemory {
 
 interface GameActions {
     initGame: () => void;
+    distributeCards: () => void;
     verifyState: () => void;
     hit: () => void;
     stand: () => void;
+    dealerTurn: () => void;
 }
 
 export type GameStore = GameMemory & GameActions;
