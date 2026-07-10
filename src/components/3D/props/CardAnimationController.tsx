@@ -14,13 +14,14 @@ export default function CardAnimationController({anchors}: { anchors: CasinoAnch
             {playerHand.map((card, index) => {
                 const target = anchors.player[index + 1];
                 if (!target) return null;
-                return <CardModel key={card.id} card={card} spawn={anchors.deck as Vector3} target={target}/>;
+                return <CardModel key={card.id} card={card} spawn={anchors.deck as Vector3} target={target} hidden={false}/>;
             })}
 
             {dealerHand.map((card, index) => {
                 const target = anchors.dealer[index + 1];
                 if (!target) return null;
-                return <CardModel key={card.id} card={card} spawn={anchors.deck as Vector3} target={target}/>;
+                const hidden = card.hidden !== null && card.hidden === true;
+                return <CardModel key={card.id} card={card} spawn={anchors.deck as Vector3} target={target} hidden={hidden}/>;
             })}
         </>
     );

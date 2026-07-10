@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import {create} from 'zustand'
 import {GameState} from "../types/enums/GameState.ts";
 import {GameWinner} from "../types/enums/GameWinner.ts";
 import {calculateHand, createDeck, distributeCards, verifyGameResult} from "../utils/blackjackLogic.ts";
@@ -28,6 +28,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
             gameState: GameState.PLAYER_TURN
         });
         void (async () => {
+            await wait(CARD_ANIMATION_MS);
             for (let i = 0; i < 4; i++) {
                 const isPlayer = i % 2 === 0;
                 const newCard: Card[] = distributeCards(get().deck, 1);
@@ -38,11 +39,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
                         playerScore: calculateHand(newHand),
                     });
                 } else {
+                    const hidden = i === 3;
+                    newCard[0].hidden = hidden;
                     const newHand: Card[] = [...get().dealerHand, ...newCard];
                     set({
                         dealerHand: newHand,
-                        dealerScore: calculateHand(newHand),
                     });
+                    if (!hidden) {
+                        set({
+                            dealerScore: calculateHand(newHand),
+                        });
+                    }
                 }
                 await wait(CARD_ANIMATION_MS);
             }
@@ -74,7 +81,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
         void (async () => {
             await wait(CARD_ANIMATION_MS);
 
+            const dealerHand = get().dealerHand;
+            const newHand = dealerHand.map((card) => {
+                card.hidden = false;
+                return card;
+            });
+
+            set({
+                dealerHand: newHand,
+                dealerScore: calculateHand(newHand),
+            });
+
+            await wait(CARD_ANIMATION_MS);
+
             let dealerScore = get().dealerScore;
+
             while (dealerScore < 17) {
                 const newDeck = get().deck;
                 const newCard: Card[] = distributeCards(newDeck, 1);

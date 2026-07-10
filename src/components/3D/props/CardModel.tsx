@@ -7,11 +7,13 @@ import type {Card} from "../../../types/Card.ts";
 
 const ANIM_TIME = 0.06;
 
-export default function CardModel({card, spawn, target}: { card: Card; spawn: Vector3; target: Vector3; }) {
+export default function CardModel({card, spawn, target, hidden}: { card: Card; spawn: Vector3; target: Vector3; hidden: boolean }) {
     const {scene} = useGLTF("/models/card.glb");
     const groupRef = useRef<Group>(null);
-    const flipRef = useRef<Group>(null);
     const settled = useRef(false);
+    const rotation = useMemo(() => {
+        return hidden ? [Math.PI / 2, Math.PI / 2, Math.PI] : [Math.PI / 2, Math.PI / 2, 0];
+    }, [hidden]);
 
     const clone = useMemo(() => {
         const cloned = scene.clone(true);
@@ -48,27 +50,14 @@ export default function CardModel({card, spawn, target}: { card: Card; spawn: Ve
             const margin = 10;
 
             ctx.drawImage(symbolImg, margin, margin, symbolSize, symbolSize);
-
-            ctx.save();
-            ctx.translate(canvas.width - margin - symbolSize, margin);
-            ctx.rotate(Math.PI);
-            ctx.translate(-(symbolSize), -(symbolSize));
-            ctx.drawImage(symbolImg, 0, 0, symbolSize, symbolSize);
-            ctx.restore();
-
-            ctx.save();
-            ctx.translate(margin, canvas.height - margin - symbolSize);
-            ctx.rotate(Math.PI);
-            ctx.translate(-(symbolSize), -(symbolSize));
-            ctx.drawImage(symbolImg, 0, 0, symbolSize, symbolSize);
-            ctx.restore();
-
+            ctx.drawImage(symbolImg, canvas.width - margin - symbolSize, margin, symbolSize, symbolSize);
+            ctx.drawImage(symbolImg, margin, canvas.height - margin - symbolSize, symbolSize, symbolSize);
             ctx.drawImage(symbolImg, canvas.width - margin - symbolSize, canvas.height - margin - symbolSize, symbolSize, symbolSize);
 
             applyTexture();
         };
 
-        ctx.font = 'bold 140px Arial';
+        ctx.font = 'bold 180px Arial';
         ctx.fillStyle = card.color === "H" || card.color === "D" ? 'red' : 'black';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -102,9 +91,7 @@ export default function CardModel({card, spawn, target}: { card: Card; spawn: Ve
 
     return (
         <group ref={groupRef}>
-            <group ref={flipRef}>
-                <primitive object={clone} rotation={[Math.PI / 2, Math.PI / 2, 0]}/>
-            </group>
+            <primitive object={clone} scale={1.3} rotation={rotation}/>
         </group>
     );
 }
