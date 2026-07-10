@@ -12,8 +12,9 @@ function App() {
     const [isAnimatingCamera, setIsAnimatingCamera] = useState<boolean>(false);
 
     const gameState = useGameStore(state => state.gameState);
+    const playerScore = useGameStore(state => state.playerScore);
 
-    const showButtons = gameState === GameState.PLAYER_TURN;
+    const showButtons = gameState === GameState.PLAYER_TURN && playerScore <= 21;
     const showResults = gameState === GameState.GAME_OVER;
 
     const startGame = () => {
