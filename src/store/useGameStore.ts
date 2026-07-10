@@ -21,18 +21,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
     initGame: () => {
         const newDeck: Card[] = createDeck();
 
-        const pHand: Card[] = distributeCards(newDeck, 2);
-        const dHand: Card[] = distributeCards(newDeck, 2);
-
         set({
             deck: newDeck,
-            playerHand: pHand,
-            dealerHand: dHand,
-            playerScore: calculateHand(pHand),
-            dealerScore: calculateHand(dHand),
+            playerHand: [],
+            dealerHand: [],
             gameState: GameState.PLAYER_TURN
         });
-        get().verifyState();
+        void (async () => {
+            for (let i = 0; i < 4; i++) {
+                const isPlayer = i % 2 === 0;
+                const newCard: Card[] = distributeCards(get().deck, 1);
+                if (isPlayer) {
+                    set({
+                        playerHand: [...get().playerHand, ...newCard]
+                    });
+                } else {
+                    set({
+                        dealerHand: [...get().dealerHand, ...newCard]
+                    });
+                }
+                await wait(CARD_ANIMATION_MS);
+            }
+        })();
+        set({
+            playerScore: calculateHand(get().playerHand),
+            dealerScore: calculateHand(get().dealerHand),
+        });
     },
 
     hit: () => {
@@ -49,16 +63,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
             playerScore: newPlayerScore
         });
 
-        if (newPlayerScore > 21) {
-            void (async () => {
-                await wait(CARD_ANIMATION_MS);
-                await wait(RESULT_DELAY_MS);
-                set({
-                    gameState: GameState.GAME_OVER,
-                    gameWinner: GameWinner.DEALER_WIN,
-                });
-            })();
-        }
+        get().verifyState();
     },
 
     stand: () => {
@@ -85,13 +90,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
                 await wait(CARD_ANIMATION_MS);
             }
 
-            await wait(RESULT_DELAY_MS);
-
-            const winner = verifyGameResult(get().playerScore, get().dealerScore, false);
-            set({
-                gameState: GameState.GAME_OVER,
-                gameWinner: winner,
-            });
+            get().verifyState();
         })();
     },
 
@@ -100,12 +99,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const dealerScore = get().dealerScore;
         const isPlayerTurn = get().gameState === GameState.PLAYER_TURN;
         const winner : GameWinner | null = verifyGameResult(playerScore, dealerScore, isPlayerTurn);
-
-        if (winner !== null) {
-            set({
-                gameState: GameState.GAME_OVER,
-                gameWinner: winner
-            });
-        }
+        void (async () => {
+            if (winner !== null) {
+                await wait(RESULT_DELAY_MS);
+                set({
+                    gameState: GameState.GAME_OVER,
+                    gameWinner: winner
+                });
+            }
+        })();
     },
 }));
