@@ -91,7 +91,7 @@ export default function CardModel({card, spawn, target, hidden}: { card: Card; s
 
     return (
         <group ref={groupRef}>
-            <primitive object={clone} scale={1.3} rotation={rotation}/>
+            <primitive object={clone} scale={1.8} rotation={rotation}/>
         </group>
     );
 }

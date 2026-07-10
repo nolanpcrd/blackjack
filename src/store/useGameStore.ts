@@ -22,38 +22,44 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const newDeck: Card[] = createDeck();
 
         set({
+            gameState: GameState.IDLE,
             deck: newDeck,
             playerHand: [],
             dealerHand: [],
+        });
+
+        get().distributeCards();
+    },
+
+    distributeCards: async() => {
+        await wait(CARD_ANIMATION_MS);
+        for (let i = 0; i < 4; i++) {
+            const isPlayer = i % 2 === 0;
+            const newCard: Card[] = distributeCards(get().deck, 1);
+            if (isPlayer) {
+                const newHand: Card[] = [...get().playerHand, ...newCard];
+                set({
+                    playerHand: newHand,
+                    playerScore: calculateHand(newHand),
+                });
+            } else {
+                const hidden = i === 3;
+                newCard[0].hidden = hidden;
+                const newHand: Card[] = [...get().dealerHand, ...newCard];
+                set({
+                    dealerHand: newHand,
+                });
+                if (!hidden) {
+                    set({
+                        dealerScore: calculateHand(newHand),
+                    });
+                }
+            }
+            await wait(CARD_ANIMATION_MS);
+        }
+        set({
             gameState: GameState.PLAYER_TURN
         });
-        void (async () => {
-            await wait(CARD_ANIMATION_MS);
-            for (let i = 0; i < 4; i++) {
-                const isPlayer = i % 2 === 0;
-                const newCard: Card[] = distributeCards(get().deck, 1);
-                if (isPlayer) {
-                    const newHand: Card[] = [...get().playerHand, ...newCard];
-                    set({
-                        playerHand: newHand,
-                        playerScore: calculateHand(newHand),
-                    });
-                } else {
-                    const hidden = i === 3;
-                    newCard[0].hidden = hidden;
-                    const newHand: Card[] = [...get().dealerHand, ...newCard];
-                    set({
-                        dealerHand: newHand,
-                    });
-                    if (!hidden) {
-                        set({
-                            dealerScore: calculateHand(newHand),
-                        });
-                    }
-                }
-                await wait(CARD_ANIMATION_MS);
-            }
-        })();
     },
 
     hit: () => {
@@ -77,42 +83,43 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (get().gameState !== GameState.PLAYER_TURN) return;
 
         set({ gameState: GameState.DEALER_TURN });
+        get().dealerTurn();
+    },
 
-        void (async () => {
-            await wait(CARD_ANIMATION_MS);
+    dealerTurn: async() => {
+        await wait(CARD_ANIMATION_MS);
 
-            const dealerHand = get().dealerHand;
-            const newHand = dealerHand.map((card) => {
-                card.hidden = false;
-                return card;
-            });
+        const dealerHand = get().dealerHand;
+        const newHand = dealerHand.map((card) => {
+            card.hidden = false;
+            return card;
+        });
+
+        set({
+            dealerHand: newHand,
+            dealerScore: calculateHand(newHand),
+        });
+
+        await wait(CARD_ANIMATION_MS);
+
+        let dealerScore = get().dealerScore;
+
+        while (dealerScore < 17) {
+            const newDeck = get().deck;
+            const newCard: Card[] = distributeCards(newDeck, 1);
+            const newDealerHand = [...get().dealerHand, ...newCard];
+            dealerScore = calculateHand(newDealerHand);
 
             set({
-                dealerHand: newHand,
-                dealerScore: calculateHand(newHand),
+                deck: newDeck,
+                dealerHand: newDealerHand,
+                dealerScore,
             });
 
             await wait(CARD_ANIMATION_MS);
+        }
 
-            let dealerScore = get().dealerScore;
-
-            while (dealerScore < 17) {
-                const newDeck = get().deck;
-                const newCard: Card[] = distributeCards(newDeck, 1);
-                const newDealerHand = [...get().dealerHand, ...newCard];
-                dealerScore = calculateHand(newDealerHand);
-
-                set({
-                    deck: newDeck,
-                    dealerHand: newDealerHand,
-                    dealerScore,
-                });
-
-                await wait(CARD_ANIMATION_MS);
-            }
-
-            get().verifyState();
-        })();
+        get().verifyState();
     },
 
     verifyState: () => {
