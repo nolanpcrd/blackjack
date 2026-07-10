@@ -13,6 +13,7 @@ function App() {
 
     const gameState = useGameStore(state => state.gameState);
     const playerScore = useGameStore(state => state.playerScore);
+    const dealerScore = useGameStore(state => state.dealerScore);
 
     const showButtons = gameState === GameState.PLAYER_TURN && playerScore <= 21;
     const showResults = gameState === GameState.GAME_OVER;
@@ -37,7 +38,7 @@ function App() {
                 <></>
             </Scene>
             {isMainMenuShown && <MainMenu startCallback={startGame} />}
-            {!isMainMenuShown && <HUD showButtons={showButtons} hitCallback={handleHit} standCallback={handleStand}/>}
+            {!isMainMenuShown && <HUD showButtons={showButtons} hitCallback={handleHit} standCallback={handleStand} playerScore={playerScore} dealerScore={dealerScore}/>}
             {showResults  && <Results onRestart={startGame} />}
         </>
     )

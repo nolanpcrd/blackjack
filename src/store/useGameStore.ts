@@ -32,21 +32,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
                 const isPlayer = i % 2 === 0;
                 const newCard: Card[] = distributeCards(get().deck, 1);
                 if (isPlayer) {
+                    const newHand: Card[] = [...get().playerHand, ...newCard];
                     set({
-                        playerHand: [...get().playerHand, ...newCard]
+                        playerHand: newHand,
+                        playerScore: calculateHand(newHand),
                     });
                 } else {
+                    const newHand: Card[] = [...get().dealerHand, ...newCard];
                     set({
-                        dealerHand: [...get().dealerHand, ...newCard]
+                        dealerHand: newHand,
+                        dealerScore: calculateHand(newHand),
                     });
                 }
                 await wait(CARD_ANIMATION_MS);
             }
         })();
-        set({
-            playerScore: calculateHand(get().playerHand),
-            dealerScore: calculateHand(get().dealerHand),
-        });
     },
 
     hit: () => {

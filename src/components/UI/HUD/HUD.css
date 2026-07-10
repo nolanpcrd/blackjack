@@ -1,4 +1,6 @@
-.hud {
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+
+.hud-buttons {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -18,4 +20,22 @@
 .stand-button {
     background: var(--red-color);
     color: var(--white-color);
+}
+
+.hud-scores {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 94%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 3%;
+}
+
+.hud-score {
+    font-family: 'Jersey 10', sans-serif;
+    color: var(--white-color);
+    font-size: 2.5em;
+    -webkit-text-stroke: 2px black;
 }
