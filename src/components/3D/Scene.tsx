@@ -16,7 +16,7 @@ export default function Scene({ children, isAnimatingCamera }: { children: React
                 <CasinoScene/>
                 {children}
 
-                <PostProcessingEffects pixelSize={3.0} colorDivisions={10.0}/>
+                <PostProcessingEffects pixelSize={3.0} colorDivisions={13.0}/>
             </Canvas>
         </div>
     )

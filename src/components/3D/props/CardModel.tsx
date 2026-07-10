@@ -32,8 +32,8 @@ export default function CardModel({card, spawn, target}: { card: Card; spawn: Ve
 
     useEffect(() => {
         const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 512;
+        canvas.width = 244;
+        canvas.height = 396;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
@@ -42,22 +42,37 @@ export default function CardModel({card, spawn, target}: { card: Card; spawn: Ve
 
         const symbolImg = new Image();
         symbolImg.src = '/cards/' + card.color + '.png';
+
         symbolImg.onload = () => {
-            const size = 150;
-            ctx.drawImage(symbolImg, (512 - size) / 2, (512 - size) / 2, size, size);
+            const symbolSize = 60;
+            const margin = 10;
+
+            ctx.drawImage(symbolImg, margin, margin, symbolSize, symbolSize);
+
+            ctx.save();
+            ctx.translate(canvas.width - margin - symbolSize, margin);
+            ctx.rotate(Math.PI);
+            ctx.translate(-(symbolSize), -(symbolSize));
+            ctx.drawImage(symbolImg, 0, 0, symbolSize, symbolSize);
+            ctx.restore();
+
+            ctx.save();
+            ctx.translate(margin, canvas.height - margin - symbolSize);
+            ctx.rotate(Math.PI);
+            ctx.translate(-(symbolSize), -(symbolSize));
+            ctx.drawImage(symbolImg, 0, 0, symbolSize, symbolSize);
+            ctx.restore();
+
+            ctx.drawImage(symbolImg, canvas.width - margin - symbolSize, canvas.height - margin - symbolSize, symbolSize, symbolSize);
+
             applyTexture();
         };
 
-        ctx.font = 'bold 80px Arial';
+        ctx.font = 'bold 140px Arial';
         ctx.fillStyle = card.color === "H" || card.color === "D" ? 'red' : 'black';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(card.value, 60, 60);
-        ctx.fillText(card.value, 452, 60);
-        ctx.fillText(card.value, 60, 452);
-        ctx.fillText(card.value, 452, 452);
-
-        applyTexture();
+        ctx.fillText(card.value, canvas.width / 2, canvas.height / 2);
 
         function applyTexture() {
             const texture = new CanvasTexture(canvas);

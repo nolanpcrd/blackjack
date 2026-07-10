@@ -6,7 +6,7 @@ import type {Card} from "../types/Card.ts";
 import type {GameStore} from "../types/GameStore.ts";
 
 const CARD_ANIMATION_MS = 1000;
-const RESULT_DELAY_MS = 3000;
+const RESULT_DELAY_MS = 2000;
 const wait = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -52,6 +52,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (newPlayerScore > 21) {
             void (async () => {
                 await wait(CARD_ANIMATION_MS);
+                await wait(RESULT_DELAY_MS);
                 set({
                     gameState: GameState.GAME_OVER,
                     gameWinner: GameWinner.DEALER_WIN,
